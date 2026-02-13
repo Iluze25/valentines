@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="id" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valentine Countdown</title>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script src="/_sdk/element_sdk.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Quicksand:wght@400;500;600&amp;display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .font-playfair {
+        font-family: "Playfair Display", serif;
+      }
+      .font-quicksand {
+        font-family: "Quicksand", sans-serif;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) rotate(0deg);
+        }
+        50% {
+          transform: translateY(-20px) rotate(5deg);
+        }
+      }
+
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(255, 107, 129, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 40px rgba(255, 107, 129, 0.8);
+        }
+      }
+
+      @keyframes heartbeat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        14% {
+          transform: scale(1.3);
+        }
+        28% {
+          transform: scale(1);
+        }
+        42% {
+          transform: scale(1.3);
+        }
+        70% {
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fade-in-up {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes sparkle {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .heart-float {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .heart-float-delayed {
+        animation: float 3s ease-in-out infinite 1.5s;
+      }
+
+      .heartbeat {
+        animation: heartbeat 1.5s ease-in-out infinite;
+      }
+
+      .fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+      }
+
+      .btn-glow {
+        animation: pulse-glow 2s ease-in-out infinite;
+      }
+
+      .sparkle {
+        animation: sparkle 2s ease-in-out infinite;
+      }
+
+      .sparkle-delayed {
+        animation: sparkle 2s ease-in-out infinite 0.5s;
+      }
+
+      .sparkle-delayed-2 {
+        animation: sparkle 2s ease-in-out infinite 1s;
+      }
+
+      .time-box {
+        backdrop-filter: blur(10px);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.9) 0%,
+          rgba(255, 240, 245, 0.9) 100%
+        );
+      }
+
+      .message-modal {
+        backdrop-filter: blur(15px);
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 240, 245, 0.95) 100%
+        );
+      }
+    </style>
+    <style>
+      body {
+        box-sizing: border-box;
+      }
+    </style>
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  </head>
+  <body class="h-full m-0 p-0 overflow-auto">
+    <div
+      id="app-container"
+      class="min-h-full w-full relative overflow-hidden"
+      style="
+        background: linear-gradient(
+          135deg,
+          #ff9a9e 0%,
+          #fecfef 50%,
+          #fecfef 100%
+        );
+      "
+    >
+      <!-- Floating Hearts Background -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <div class="heart-float absolute top-10 left-10 text-6xl opacity-30">
+          💕
+        </div>
+        <div
+          class="heart-float-delayed absolute top-20 right-20 text-5xl opacity-25"
+        >
+          💗
+        </div>
+        <div class="heart-float absolute bottom-32 left-20 text-4xl opacity-20">
+          💖
+        </div>
+        <div
+          class="heart-float-delayed absolute top-40 left-1/4 text-3xl opacity-25"
+        >
+          💝
+        </div>
+        <div
+          class="heart-float absolute bottom-20 right-10 text-5xl opacity-30"
+        >
+          💕
+        </div>
+        <div
+          class="heart-float-delayed absolute top-1/3 right-1/4 text-4xl opacity-20"
+        >
+          💗
+        </div>
+        <!-- Sparkles -->
+        <div
+          class="sparkle absolute top-1/4 left-1/3 w-2 h-2 bg-white rounded-full"
+        ></div>
+        <div
+          class="sparkle-delayed absolute top-1/2 right-1/3 w-3 h-3 bg-white rounded-full"
+        ></div>
+        <div
+          class="sparkle-delayed-2 absolute bottom-1/4 left-1/2 w-2 h-2 bg-white rounded-full"
+        ></div>
+      </div>
+      <!-- Main Content -->
+      <div
+        class="relative z-10 flex flex-col items-center justify-center min-h-full px-4 py-8"
+      >
+        <!-- Title -->
+        <h1
+          id="main-title"
+          class="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-2"
+          style="color: #c44569"
+        >
+          Countdown to Valentine's Day
+        </h1>
+        <!-- Heart Icon -->
+        <div class="heartbeat text-6xl md:text-7xl my-6">💝</div>
+        <!-- Countdown Container -->
+        <div
+          id="countdown-container"
+          class="flex flex-wrap justify-center gap-4 md:gap-6 mb-8"
+        >
+          <div
+            class="time-box rounded-2xl p-4 md:p-6 shadow-lg min-w-24 md:min-w-32 text-center transform hover:scale-105 transition-transform"
+          >
+            <div
+              id="days"
+              class="font-playfair text-4xl md:text-5xl font-bold"
+              style="color: #c44569"
+            >
+              00
+            </div>
+            <div
+              class="font-quicksand text-sm md:text-base mt-2"
+              style="color: #e17055"
+            >
+              Hari
+            </div>
+          </div>
+          <div
+            class="time-box rounded-2xl p-4 md:p-6 shadow-lg min-w-24 md:min-w-32 text-center transform hover:scale-105 transition-transform"
+          >
+            <div
+              id="hours"
+              class="font-playfair text-4xl md:text-5xl font-bold"
+              style="color: #c44569"
+            >
+              00
+            </div>
+            <div
+              class="font-quicksand text-sm md:text-base mt-2"
+              style="color: #e17055"
+            >
+              Jam
+            </div>
+          </div>
+          <div
+            class="time-box rounded-2xl p-4 md:p-6 shadow-lg min-w-24 md:min-w-32 text-center transform hover:scale-105 transition-transform"
+          >
+            <div
+              id="minutes"
+              class="font-playfair text-4xl md:text-5xl font-bold"
+              style="color: #c44569"
+            >
+              00
+            </div>
+            <div
+              class="font-quicksand text-sm md:text-base mt-2"
+              style="color: #e17055"
+            >
+              Menit
+            </div>
+          </div>
+          <div
+            class="time-box rounded-2xl p-4 md:p-6 shadow-lg min-w-24 md:min-w-32 text-center transform hover:scale-105 transition-transform"
+          >
+            <div
+              id="seconds"
+              class="font-playfair text-4xl md:text-5xl font-bold"
+              style="color: #c44569"
+            >
+              00
+            </div>
+            <div
+              class="font-quicksand text-sm md:text-base mt-2"
+              style="color: #e17055"
+            >
+              Detik
+            </div>
+          </div>
+        </div>
+        <!-- Button Container (hidden initially) -->
+        <div id="button-container" class="hidden fade-in-up">
+          <button
+            id="special-button"
+            onclick="showMessage()"
+            class="btn-glow font-quicksand text-lg md:text-xl font-semibold px-8 py-4 rounded-full text-white transform hover:scale-110 transition-all duration-300 cursor-pointer border-none"
+            style="
+              background: linear-gradient(135deg, #ff6b81 0%, #c44569 100%);
+            "
+          >
+            💌 Buka Pesan Spesial 💌
+          </button>
+        </div>
+        <!-- Message Modal (hidden initially) -->
+        <div
+          id="message-modal"
+          class="hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+          style="background: rgba(0, 0, 0, 0.5)"
+        >
+          <div
+            class="message-modal rounded-3xl p-8 md:p-12 max-w-lg w-full text-center shadow-2xl fade-in-up"
+          >
+            <div class="text-6xl md:text-7xl mb-6">💝</div>
+            <h2
+              class="font-playfair text-2xl md:text-3xl font-bold mb-4"
+              style="color: #c44569"
+            >
+              Happy Valentine's Day!
+            </h2>
+            <p
+              id="secret-message"
+              class="font-quicksand text-lg md:text-xl mb-6"
+              style="color: #e17055"
+            >
+              Semoga hari ini penuh dengan cinta dan kebahagiaan! 💕
+            </p>
+            <button
+              onclick="closeMessage()"
+              class="font-quicksand text-base font-semibold px-6 py-3 rounded-full text-white transform hover:scale-105 transition-all duration-300 cursor-pointer border-none"
+              style="
+                background: linear-gradient(135deg, #ff6b81 0%, #c44569 100%);
+              "
+            >
+              Terima Kasih 💖
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const defaultConfig = {
+        target_date: "2025-02-14", // ← GANTI TANGGAL DI SINI! Format: YYYY-MM-DD
+        main_title: "Countdown to Valentine's Day",
+        button_text: "💌 Buka Pesan Spesial 💌",
+        secret_message:
+          "Semoga hari ini penuh dengan cinta dan kebahagiaan! 💕",
+        primary_color: "#c44569",
+        secondary_color: "#ff6b81",
+        text_color: "#e17055",
+        background_start: "#ff9a9e",
+        background_end: "#fecfef",
+      };
+
+      let config = { ...defaultConfig };
+      let countdownInterval;
+
+      function updateCountdown() {
+        const now = new Date();
+        const targetDate = new Date("Feb 14, 2026 14:00:00").getTime();
+
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+          clearInterval(countdownInterval);
+          document.getElementById("days").textContent = "00";
+          document.getElementById("hours").textContent = "00";
+          document.getElementById("minutes").textContent = "00";
+          document.getElementById("seconds").textContent = "00";
+
+          document.getElementById("countdown-container").style.opacity = "0.5";
+          document
+            .getElementById("button-container")
+            .classList.remove("hidden");
+          return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = String(days).padStart(
+          2,
+          "0",
+        );
+        document.getElementById("hours").textContent = String(hours).padStart(
+          2,
+          "0",
+        );
+        document.getElementById("minutes").textContent = String(
+          minutes,
+        ).padStart(2, "0");
+        document.getElementById("seconds").textContent = String(
+          seconds,
+        ).padStart(2, "0");
+      }
+
+      function showMessage() {
+        document.getElementById("message-modal").classList.remove("hidden");
+      }
+
+      function closeMessage() {
+        document.getElementById("message-modal").classList.add("hidden");
+      }
+
+      async function onConfigChange(configUpdate) {
+        config = { ...config, ...configUpdate };
+
+        const title = config.main_title || defaultConfig.main_title;
+        const btnText = config.button_text || defaultConfig.button_text;
+        const secretMsg = config.secret_message || defaultConfig.secret_message;
+        const primaryColor =
+          config.primary_color || defaultConfig.primary_color;
+        const secondaryColor =
+          config.secondary_color || defaultConfig.secondary_color;
+        const textColor = config.text_color || defaultConfig.text_color;
+        const bgStart =
+          config.background_start || defaultConfig.background_start;
+        const bgEnd = config.background_end || defaultConfig.background_end;
+
+        document.getElementById("main-title").textContent = title;
+        document.getElementById("main-title").style.color = primaryColor;
+
+        document.getElementById("special-button").innerHTML = btnText;
+        document.getElementById("special-button").style.background =
+          `linear-gradient(135deg, ${secondaryColor} 0%, ${primaryColor} 100%)`;
+
+        document.getElementById("secret-message").textContent = secretMsg;
+        document.getElementById("secret-message").style.color = textColor;
+
+        document.getElementById("app-container").style.background =
+          `linear-gradient(135deg, ${bgStart} 0%, ${bgEnd} 50%, ${bgEnd} 100%)`;
+
+        document
+          .querySelectorAll(".time-box > div:first-child")
+          .forEach((el) => {
+            el.style.color = primaryColor;
+          });
+        document
+          .querySelectorAll(".time-box > div:last-child")
+          .forEach((el) => {
+            el.style.color = textColor;
+          });
+
+        // Restart countdown jika tanggal berubah
+        if (configUpdate.target_date) {
+          clearInterval(countdownInterval);
+          updateCountdown();
+          countdownInterval = setInterval(updateCountdown, 1000);
+        }
+      }
+
+      function mapToCapabilities(config) {
+        return {
+          recolorables: [
+            {
+              get: () =>
+                config.background_start || defaultConfig.background_start,
+              set: (value) => {
+                config.background_start = value;
+                window.elementSdk.setConfig({ background_start: value });
+              },
+            },
+            {
+              get: () => config.background_end || defaultConfig.background_end,
+              set: (value) => {
+                config.background_end = value;
+                window.elementSdk.setConfig({ background_end: value });
+              },
+            },
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => {
+                config.primary_color = value;
+                window.elementSdk.setConfig({ primary_color: value });
+              },
+            },
+            {
+              get: () =>
+                config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => {
+                config.secondary_color = value;
+                window.elementSdk.setConfig({ secondary_color: value });
+              },
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => {
+                config.text_color = value;
+                window.elementSdk.setConfig({ text_color: value });
+              },
+            },
+          ],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined,
+        };
+      }
+
+      function mapToEditPanelValues(config) {
+        return new Map([
+          ["target_date", config.target_date || defaultConfig.target_date],
+          ["main_title", config.main_title || defaultConfig.main_title],
+          ["button_text", config.button_text || defaultConfig.button_text],
+          [
+            "secret_message",
+            config.secret_message || defaultConfig.secret_message,
+          ],
+        ]);
+      }
+
+      // Initialize
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities,
+          mapToEditPanelValues,
+        });
+      }
+
+      // Start countdown
+      updateCountdown();
+      countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'9cd19a0bd7f125fd',t:'MTc3MDk1NzE0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
