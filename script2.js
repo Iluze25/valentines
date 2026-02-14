@@ -50,8 +50,8 @@ const openModel = function () {
   MovesModel.textContent = movesCount;
   secondModel.textContent = countdown.textContent;
   setTimeout(() => {
-    window.location.href = "https://s9.nontonanimeid.boats/";
-  }, 3000);
+    window.location.href = "index3.html";
+  }, 5000);
 };
 
 function startTimer() {
