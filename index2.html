@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matching Game</title>
+    <link rel="stylesheet" href="style2.css" />
+    <link rel="shortcut icon" href="images/logo.gif" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="title">
+        <h1>💕 Valentine Pair Quest</h1>
+        <p>A Love Algorithm for Ai Sopiah ❤️</p>
+      </div>
+
+      <div class="head">
+        <p>Moves: <span class="Moves">0</span></p>
+        <p class="timer">Time: <span id="countdown">1:00</span></p>
+        <button type="button" class="restert">Restert</button>
+      </div>
+      <div class="memory-game">
+        <!--1-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+
+          <video
+            src="images/among-1.mp4"
+            autoplay
+            muted
+            loop
+            class="backface"
+          ></video>
+        </div>
+        <!--2-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <video
+            src="images/among-1.mp4"
+            autoplay
+            muted
+            loop
+            class="backface"
+          ></video>
+        </div>
+        <!--3-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <video autoplay muted loop class="backface">
+            <source src="images/among-2.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <!--4-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <video autoplay muted loop class="backface">
+            <source src="images/among-2.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <!--5-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-3.png" alt="backface" class="backface" />
+        </div>
+        <!--6-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-3.png" alt="backface" class="backface" />
+        </div>
+        <!--7-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-4.png" alt="backface" class="backface" />
+        </div>
+        <!--8-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-4.png" alt="backface" class="backface" />
+        </div>
+        <!--9-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-5.jpg" alt="backface" class="backface" />
+        </div>
+        <!--10-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-5.jpg" alt="backface" class="backface" />
+        </div>
+        <!--11-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-6.png" alt="backface" class="backface" />
+        </div>
+        <!--12-->
+        <div class="memory-card">
+          <img src="images/logo.gif" alt="frontface" class="frontface" />
+          <img src="images/among-6.png" alt="backface" class="backface" />
+        </div>
+      </div>
+    </div>
+    <div class="modal visibilty">
+      <div><h2>Congratulations</h2></div>
+      <div>
+        <p>
+          You completed this game in <span class="move-model"></span> moves and
+          <span class="second-model"></span> seconds
+        </p>
+      </div>
+    </div>
+    <div class="modal GameOver visibilty">
+      <div><h2>Game Over</h2></div>
+      <div><p>Time is over</p></div>
+    </div>
+    <div class="overlay visibilty"></div>
+
+    <script src="script2.js"></script>
+  </body>
+</html>
